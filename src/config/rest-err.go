@@ -8,6 +8,9 @@ type RestError struct {
 	Code    int    `json:"code"`
 }
 
+func (r *RestError) Error() string {
+	return r.Message
+}
 func NewRestError(message, err string, code int) *RestError {
 	return &RestError{
 		Message: message,

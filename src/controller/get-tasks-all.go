@@ -5,6 +5,6 @@ import (
 	"log"
 )
 
-func CreateTask(c *gin.Context) {
-	log.Println("Tarefa Criada")
+func GetTasksAll(c *gin.Context) {
+	log.Println("Tarefas")
 }
