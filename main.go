@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/rodrigodip/toDo-API/src/controller/routes"
+	"log"
 )
 
 func main() {
