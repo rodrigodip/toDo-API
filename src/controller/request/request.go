@@ -1,9 +1,6 @@
 package request
 
-type TaskResponse struct {
-	TaskId      uint8
-	Title       string
-	Description *string
-	Added       *string
-	Completed   bool
+type TaskRequest struct {
+	Title       string  `json:"title"`
+	Description *string `json:"description"`
 }
