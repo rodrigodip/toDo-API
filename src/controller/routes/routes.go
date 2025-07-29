@@ -5,13 +5,6 @@ import (
 	"github.com/rodrigodip/toDo-API/src/controller"
 )
 
-/*
-- Criar uma nova tarefa
-- Listar todas as tarefas
-- Obter uma tarefa por ID
-- Atualizar uma tarefa existente
-- Remover uma tarefa
-*/
 func InitGroup(r *gin.RouterGroup) {
 	r.POST("/createTask", controller.CreateTask)
 	r.GET("/allTasks", controller.GetTasksAll)

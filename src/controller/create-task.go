@@ -3,8 +3,9 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/rodrigodip/toDo-API/src/config"
+	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/request"
+	"github.com/rodrigodip/toDo-API/src/model/repository"
 )
 
 func CreateTask(c *gin.Context) {
@@ -18,5 +19,7 @@ func CreateTask(c *gin.Context) {
 		c.JSON(restErr.Code, restErr)
 		return
 	}
-	fmt.Println(taskRequest)
+	repo := repository.TaskRepo
+
+	fmt.Println(repo)
 }
