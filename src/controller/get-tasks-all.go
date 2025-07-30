@@ -1,10 +1,13 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
-	"log"
+	"github.com/rodrigodip/toDo-API/src/model/service"
 )
 
 func GetTasksAll(c *gin.Context) {
-	log.Println("Tarefas")
+	tasks := service.GetAllTasks()
+	c.JSON(http.StatusOK, tasks)
 }
