@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
-	"github.com/rodrigodip/toDo-API/src/controller/request"
-	"github.com/rodrigodip/toDo-API/src/model/repository"
+	"github.com/rodrigodip/toDo-API/src/model"
+	"github.com/rodrigodip/toDo-API/src/model/service"
+	"net/http"
 )
 
 func CreateTask(c *gin.Context) {
 
-	var taskRequest request.TaskRequest
+	var taskRequest model.Task
 
 	if err := c.ShouldBindJSON(&taskRequest); err != nil {
 		restErr := rest_err.NewBadRequest(
@@ -19,7 +20,6 @@ func CreateTask(c *gin.Context) {
 		c.JSON(restErr.Code, restErr)
 		return
 	}
-	repo := repository.TaskRepo
-
-	fmt.Println(repo)
+	created := service.CreateTask(taskRequest)
+	c.JSON(http.StatusCreated, created)
 }
