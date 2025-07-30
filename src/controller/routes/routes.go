@@ -8,7 +8,7 @@ import (
 func InitGroup(r *gin.RouterGroup) {
 	r.POST("/createTask", controller.CreateTask)
 	r.GET("/allTasks", controller.GetTasksAll)
-	r.GET("/tasksById/:taskId", controller.GetTaskById)
-	r.PUT("/editTask/:taskId", controller.UpdateTask)
+	r.GET("/taskById/:id", controller.GetTaskById)
+	r.PUT("/editTask/:id", controller.UpdateTask)
 	r.DELETE("/deleteTask/:taskId", controller.DeleteTask)
 }

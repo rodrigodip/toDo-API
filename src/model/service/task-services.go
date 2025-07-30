@@ -2,9 +2,13 @@ package service
 
 import (
 	"errors"
-	"github.com/rodrigodip/toDo-API/src/model"
+	"fmt"
 	"slices"
+	"strconv"
 	"sync"
+
+	"github.com/rodrigodip/toDo-API/src/config/rest-err"
+	"github.com/rodrigodip/toDo-API/src/model"
 )
 
 var (
@@ -27,13 +31,26 @@ func GetAllTasks() []model.Task {
 	return tasks
 }
 
-func GetTaskByID(id int) (model.Task, error) {
+func GetTaskByID(id string) (model.Task, *rest_err.RestErr) {
+
+	intId, err := strconv.Atoi(id) // converts string to integer
+	if err != nil {
+		restErr := rest_err.NewBadRequest(
+			fmt.Sprintln("Error: ID must be a number"),
+		)
+		return model.Task{}, restErr
+	}
+
 	for _, t := range tasks {
-		if t.ID == id {
+		if t.ID == intId {
 			return t, nil
 		}
 	}
-	return model.Task{}, errors.New("task not found")
+
+	restErr := rest_err.NewNotFoundError(
+		fmt.Sprintln("Error: ID not Found"),
+	)
+	return model.Task{}, restErr
 }
 
 func UpdateTaskByID(id int, updated model.Task) (model.Task, error) {
