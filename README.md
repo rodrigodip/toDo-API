@@ -51,3 +51,60 @@ go mod tidy
 ```bash
 go run main.go
 ```
+
+## Testing the Application
+
+The MeuPrimeiroCRUD em Go application offers REST endpoints for creating, listing, updating, and deleting users. You can use tools like [curl](https://curl.se/) or [Postman](https://www.postman.com/) to test the endpoints. Here are some `curl` command examples for testing the endpoints:
+
+- **Criar uma tarefa:**
+
+  ```
+  curl -X POST -H "Content-Type: application/json" -d '{"title": "Lavar o carro", "description":"Comprar pasta de polir"}' http://localhost:8080/createTask
+  ```
+
+- **Requisitar uma tarefa por ID:**
+
+  ```
+    curl -X GET http://localhost:8080/taskById/{id}
+  ```
+
+- **Requisitar todas as tarefa:**
+
+  ```
+    curl -X GET http://localhost:8080/allTasks
+  ```
+
+- **Atualizar uma tarefa:**
+
+  ```
+  curl -X PUT -H "Content-Type: application/json" -d '{"title": "Lavar o carro e a kombi", "description":"Comprar pasta de polir e sabão"}' http://localhost:8080/updateTask/{id}
+  ```
+
+- **Atualizar tarefa como concluída:**
+
+  ```
+    curl -X PUT http://localhost:8080/setTaskDone/{id}
+  ```
+
+- **Deletar uma tarefa:**
+
+  ```
+    curl -X DELETE http://localhost:8080/deleteTask/{id}
+  ```
+
+Lembre-se de ajustar os comandos de acordo com sua necessidade.
+
+## Data Models
+
+### Requisições
+
+- `title` (string, required): Títulos precisam conter o mínimo de 3 e máximo 30 caracteres.
+- `description` (string):  Descrições são **opcionais** e precisam conter no máximo 50 caracteres.
+
+### Respostas
+
+- `id` (integer): Identificador numérico único da tarefa.
+- `title` (string, required): Títulos precisam conter o mínimo de 3 e máximo 30 caracteres.
+- `description` (string): Descrições são **opcionais** e precisam conter no máximo 50 caracteres.
+- `completed` (bool): Identificador lógico de tarefa completada.
+
