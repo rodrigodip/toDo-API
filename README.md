@@ -77,7 +77,7 @@ The MeuPrimeiroCRUD em Go application offers REST endpoints for creating, listin
 - **Atualizar uma tarefa:**
 
   ```
-  curl -X PUT -H "Content-Type: application/json" -d '{"title": "Lavar o carro e a kombi", "description":"Comprar pasta de polir e sabão"}' http://localhost:8080/updateTask/{id}
+  curl -X PUT -H "Content-Type: application/json" -d '{"title": "Lavar o carro e a kombi", "description":"Comprar pasta de polir e sabão"}' http://localhost:8080/editTask/{id}
   ```
 
 - **Atualizar tarefa como concluída:**
