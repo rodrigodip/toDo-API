@@ -23,9 +23,13 @@ func CreateTask(rep request.TaskRequest) model.Task {
 
 	var newTask model.Task
 
+	newTask.Title = rep.Title
+	newTask.Description = rep.Description
 	newTask.ID = nextID
+
 	nextID++
 	tasks = append(tasks, newTask)
+
 	return newTask
 }
 
