@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
+	"github.com/rodrigodip/toDo-API/src/controller/model/request"
 	"github.com/rodrigodip/toDo-API/src/model"
 )
 
@@ -16,14 +17,16 @@ var (
 	taskMux sync.Mutex
 )
 
-func CreateTask(task model.Task) model.Task {
+func CreateTask(rep request.TaskRequest) model.Task {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
-	task.ID = nextID
+	var newTask model.Task
+
+	newTask.ID = nextID
 	nextID++
-	tasks = append(tasks, task)
-	return task
+	tasks = append(tasks, newTask)
+	return newTask
 }
 
 func GetAllTasks() []model.Task {
@@ -124,5 +127,4 @@ func SetTaskDone(id string) *rest_err.RestErr {
 		fmt.Sprintln("Error: Task not Found"),
 	)
 	return restErr
-
 }
