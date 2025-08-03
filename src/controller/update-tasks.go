@@ -12,7 +12,7 @@ import (
 
 func UpdateTask(c *gin.Context) {
 
-	var taskToUpdate model.Task
+	var taskToUpdate model.TaskData
 	taskId := c.Param("id")
 
 	if err := c.ShouldBindJSON(&taskToUpdate); err != nil {

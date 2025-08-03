@@ -1,8 +1,26 @@
 package model
 
-type Task struct {
-	ID          int    `json:"id"`
-	Title       string `json:"title" binding:"required,min=3,max=30"`
-	Description string `json:"description,omitempty" binding:"max=50"`
-	Completed   bool   `json:"completed"`
+type TaskData struct {
+	ID          int
+	Title       string
+	Description string
+	Completed   bool
+}
+
+func (td *TaskData) SetId(id int) {
+
+	td.ID = id
+}
+
+func (td *TaskData) SetTitle(title string) {
+
+	td.Title = title
+}
+
+func (td *TaskData) SetDescription(description string) {
+	td.Description = description
+}
+
+func (td *TaskData) SetCompleted(completed bool) {
+	td.Completed = completed
 }

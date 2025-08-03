@@ -8,43 +8,49 @@ import (
 
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/request"
+	"github.com/rodrigodip/toDo-API/src/controller/model/response"
 	"github.com/rodrigodip/toDo-API/src/model"
 )
 
 var (
-	tasks   = []model.Task{}
+	tasks   = []model.TaskData{}
 	nextID  = 1
 	taskMux sync.Mutex
 )
 
-func CreateTask(rep request.TaskRequest) model.Task {
+func CreateTask(rep request.TaskRequest) response.TaskRespose {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
-	var newTask model.Task
+	var newTask model.TaskData
 
-	newTask.Title = rep.Title
-	newTask.Description = rep.Description
-	newTask.ID = nextID
+	newTask.SetId(nextID)
+	newTask.SetTitle(rep.Title)
+	newTask.SetDescription(rep.Description)
 
 	nextID++
 	tasks = append(tasks, newTask)
 
-	return newTask
+	return response.TaskRespose{
+		ID:          newTask.ID,
+		Title:       newTask.Title,
+		Description: newTask.Description,
+		Completed:   newTask.Completed,
+	}
 }
 
-func GetAllTasks() []model.Task {
+func GetAllTasks() []model.TaskData {
 	return tasks
 }
 
-func GetTaskByID(id string) (model.Task, *rest_err.RestErr) {
+func GetTaskByID(id string) (model.TaskData, *rest_err.RestErr) {
 
 	intId, err := strconv.Atoi(id) // converts string to integer
 	if err != nil {
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintln("Error: ID must be a number"),
 		)
-		return model.Task{}, restErr
+		return model.TaskData{}, restErr
 	}
 
 	for _, t := range tasks {
@@ -56,10 +62,10 @@ func GetTaskByID(id string) (model.Task, *rest_err.RestErr) {
 	restErr := rest_err.NewNotFoundError(
 		fmt.Sprintln("Error: ID not Found"),
 	)
-	return model.Task{}, restErr
+	return model.TaskData{}, restErr
 }
 
-func UpdateTaskByID(id string, updated model.Task) (model.Task, *rest_err.RestErr) {
+func UpdateTaskByID(id string, updated model.TaskData) (model.TaskData, *rest_err.RestErr) {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
@@ -68,7 +74,7 @@ func UpdateTaskByID(id string, updated model.Task) (model.Task, *rest_err.RestEr
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintln("Error: ID must be a number"),
 		)
-		return model.Task{}, restErr
+		return model.TaskData{}, restErr
 	}
 
 	for i, t := range tasks {
@@ -82,7 +88,7 @@ func UpdateTaskByID(id string, updated model.Task) (model.Task, *rest_err.RestEr
 	restErr := rest_err.NewNotFoundError(
 		fmt.Sprintln("Error: ID not Found"),
 	)
-	return model.Task{}, restErr
+	return model.TaskData{}, restErr
 }
 
 func DeleteTaskByID(id string) *rest_err.RestErr {
