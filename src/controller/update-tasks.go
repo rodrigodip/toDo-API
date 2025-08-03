@@ -6,13 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
-	"github.com/rodrigodip/toDo-API/src/model"
+	"github.com/rodrigodip/toDo-API/src/controller/model/request"
 	"github.com/rodrigodip/toDo-API/src/model/service"
 )
 
 func UpdateTask(c *gin.Context) {
 
-	var taskToUpdate model.TaskData
+	var taskToUpdate request.TaskRequest
 	taskId := c.Param("id")
 
 	if err := c.ShouldBindJSON(&taskToUpdate); err != nil {

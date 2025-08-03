@@ -12,6 +12,10 @@ func (td *TaskData) SetId(id int) {
 	td.ID = id
 }
 
+func (td *TaskData) GetId() int {
+	return td.ID
+}
+
 func (td *TaskData) SetTitle(title string) {
 
 	td.Title = title
