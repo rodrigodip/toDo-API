@@ -17,7 +17,6 @@ func (td *TaskData) GetId() int {
 }
 
 func (td *TaskData) SetTitle(title string) {
-
 	td.Title = title
 }
 
@@ -27,4 +26,13 @@ func (td *TaskData) SetDescription(description string) {
 
 func (td *TaskData) SetCompleted(completed bool) {
 	td.Completed = completed
+}
+
+func (td *TaskData) GetAll() TaskData {
+	return TaskData{
+		ID:          td.ID,
+		Title:       td.Title,
+		Description: td.Description,
+		Completed:   td.Completed,
+	}
 }
