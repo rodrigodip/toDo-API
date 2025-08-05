@@ -22,7 +22,7 @@ func SetTaskDone(id string) *rest_err.RestErr {
 
 	for _, t := range repository.TaskRepository {
 		if t.GetId() == intId {
-			t.SetCompleted(true)
+			repository.TaskRepository[intId].SetCompleted(true)
 			return nil
 		}
 	}

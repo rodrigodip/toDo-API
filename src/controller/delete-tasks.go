@@ -7,6 +7,17 @@ import (
 	"net/http"
 )
 
+// DeleteTask deletes a task with the specified ID.
+// @Summary Delete task
+// @Description Deletes a task based on the ID provided as a parameter.
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param taskId path string true "ID of the task to be deleted"
+// @Success 200 "Task {taskId} was Deleted"
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
+// @Router /deleteTask/{taskId} [delete]
 func DeleteTask(c *gin.Context) {
 
 	taskId := c.Param("id")

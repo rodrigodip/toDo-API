@@ -14,7 +14,7 @@ var (
 	nextID  = 1
 )
 
-func CreateTask(req request.TaskRequest) response.TaskRespose {
+func CreateTask(req request.TaskRequest) response.TaskResponse {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
@@ -27,7 +27,7 @@ func CreateTask(req request.TaskRequest) response.TaskRespose {
 	nextID++
 	repository.TaskRepository = append(repository.TaskRepository, newTask)
 
-	return response.TaskRespose{
+	return response.TaskResponse{
 		ID:          newTask.ID,
 		Title:       newTask.Title,
 		Description: newTask.Description,

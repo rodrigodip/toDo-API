@@ -10,6 +10,17 @@ import (
 	"github.com/rodrigodip/toDo-API/src/model/service"
 )
 
+// CreateTask Creates a new task
+// @Summary Create a new task
+// @Description Create a new task with the provided title and description
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param TaskRequest body request.TaskRequest true "Task information for registration"
+// @Success 200 {object} response.TaskResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
+// @Router /createTask [post]
 func CreateTask(c *gin.Context) {
 
 	var taskRequest request.TaskRequest

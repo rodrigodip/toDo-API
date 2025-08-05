@@ -5,11 +5,11 @@ import (
 	"github.com/rodrigodip/toDo-API/src/model/repository"
 )
 
-func GetAllTasks() []response.TaskRespose {
-	var tasks []response.TaskRespose
+func GetAllTasks() []response.TaskResponse {
+	var tasks []response.TaskResponse
 
 	for _, t := range repository.TaskRepository {
-		tasks = append(tasks, response.TaskRespose(t.GetAll()))
+		tasks = append(tasks, response.TaskResponse(t.GetAll()))
 	}
 	return tasks
 }

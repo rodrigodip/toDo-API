@@ -9,19 +9,19 @@ import (
 	"github.com/rodrigodip/toDo-API/src/model/repository"
 )
 
-func GetTaskByID(id string) (response.TaskRespose, *rest_err.RestErr) {
+func GetTaskByID(id string) (response.TaskResponse, *rest_err.RestErr) {
 
 	intId, err := strconv.Atoi(id) // converts string to integer
 	if err != nil {
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintln("Error: ID must be a number"),
 		)
-		return response.TaskRespose{}, restErr
+		return response.TaskResponse{}, restErr
 	}
 
 	for _, t := range repository.TaskRepository {
 		if t.GetId() == intId {
-			return response.TaskRespose{
+			return response.TaskResponse{
 				ID:          t.ID,
 				Title:       t.Title,
 				Description: t.Description,
@@ -33,5 +33,5 @@ func GetTaskByID(id string) (response.TaskRespose, *rest_err.RestErr) {
 	restErr := rest_err.NewNotFoundError(
 		fmt.Sprintln("Error: ID not Found"),
 	)
-	return response.TaskRespose{}, restErr
+	return response.TaskResponse{}, restErr
 }

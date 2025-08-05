@@ -10,7 +10,7 @@ import (
 	"github.com/rodrigodip/toDo-API/src/model/repository"
 )
 
-func UpdateTaskByID(id string, req request.TaskRequest) (response.TaskRespose, *rest_err.RestErr) {
+func UpdateTaskByID(id string, req request.TaskRequest) (response.TaskResponse, *rest_err.RestErr) {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
@@ -19,16 +19,16 @@ func UpdateTaskByID(id string, req request.TaskRequest) (response.TaskRespose, *
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintln("Error: ID must be a number"),
 		)
-		return response.TaskRespose{}, restErr
+		return response.TaskResponse{}, restErr
 	}
 
 	for _, t := range repository.TaskRepository {
 
 		if t.GetId() == intId {
-			t.SetTitle(req.Title)
-			t.SetDescription(req.Description)
+			repository.TaskRepository[intId].SetTitle(req.Title)
+			repository.TaskRepository[intId].SetDescription(req.Description)
 
-			return response.TaskRespose{
+			return response.TaskResponse{
 				ID:          t.ID,
 				Title:       t.Title,
 				Description: t.Description,
@@ -40,5 +40,5 @@ func UpdateTaskByID(id string, req request.TaskRequest) (response.TaskRespose, *
 		fmt.Sprintln("Error: ID not Found"),
 	)
 
-	return response.TaskRespose{}, restErr
+	return response.TaskResponse{}, restErr
 }

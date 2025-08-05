@@ -2,10 +2,18 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/rodrigodip/toDo-API/docs"
 	"github.com/rodrigodip/toDo-API/src/controller/routes"
 	"log"
 )
 
+// @title toDo-API
+// @version 1.0
+// @description API for crud operations on tasks
+// @host localhost:8080
+// @BasePath /
+// @schemes http
+// @license MIT
 func main() {
 	router := gin.Default()
 	routes.InitGroup(&router.RouterGroup)
