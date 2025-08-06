@@ -6,39 +6,40 @@ import (
 
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/request"
-	"github.com/rodrigodip/toDo-API/src/controller/model/response"
 	"github.com/rodrigodip/toDo-API/src/model/repository"
 )
 
-func UpdateTaskByID(id string, req request.TaskRequest) (response.TaskResponse, *rest_err.RestErr) {
+func UpdateTaskByID(id string, req request.TaskRequest) *rest_err.RestErr {
 	taskMux.Lock()
 	defer taskMux.Unlock()
+
+	if len(repository.TaskRepository) < 1 {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintln("Error: No Tasks Found"),
+		)
+		return restErr
+	}
 
 	intId, err := strconv.Atoi(id) // converts string to integer
 	if err != nil {
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintln("Error: ID must be a number"),
 		)
-		return response.TaskResponse{}, restErr
+		return restErr
 	}
 
-	for _, t := range repository.TaskRepository {
+	for idx, t := range repository.TaskRepository {
 
 		if t.GetId() == intId {
-			repository.TaskRepository[intId].SetTitle(req.Title)
-			repository.TaskRepository[intId].SetDescription(req.Description)
+			repository.TaskRepository[idx].SetTitle(req.Title)
+			repository.TaskRepository[idx].SetDescription(req.Description)
 
-			return response.TaskResponse{
-				ID:          t.ID,
-				Title:       t.Title,
-				Description: t.Description,
-				Completed:   t.Completed,
-			}, nil
+			return nil
 		}
 	}
 	restErr := rest_err.NewNotFoundError(
 		fmt.Sprintln("Error: ID not Found"),
 	)
 
-	return response.TaskResponse{}, restErr
+	return restErr
 }

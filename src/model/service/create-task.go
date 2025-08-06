@@ -3,6 +3,7 @@ package service
 import (
 	"sync"
 
+	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/request"
 	"github.com/rodrigodip/toDo-API/src/controller/model/response"
 	"github.com/rodrigodip/toDo-API/src/model"
@@ -14,7 +15,7 @@ var (
 	nextID  = 1
 )
 
-func CreateTask(req request.TaskRequest) response.TaskResponse {
+func CreateTask(req request.TaskRequest) (response.TaskResponse, *rest_err.RestErr) {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
@@ -32,5 +33,5 @@ func CreateTask(req request.TaskRequest) response.TaskResponse {
 		Title:       newTask.Title,
 		Description: newTask.Description,
 		Completed:   newTask.Completed,
-	}
+	}, nil
 }

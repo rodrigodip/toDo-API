@@ -11,6 +11,13 @@ import (
 
 func GetTaskByID(id string) (response.TaskResponse, *rest_err.RestErr) {
 
+	if len(repository.TaskRepository) < 1 {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintln("Error: No Tasks Found"),
+		)
+		return response.TaskResponse{}, restErr
+	}
+
 	intId, err := strconv.Atoi(id) // converts string to integer
 	if err != nil {
 		restErr := rest_err.NewBadRequest(

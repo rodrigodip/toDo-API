@@ -12,6 +12,13 @@ func SetTaskDone(id string) *rest_err.RestErr {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
+	if len(repository.TaskRepository) < 1 {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintln("Error: No Tasks Found"),
+		)
+		return restErr
+	}
+
 	intId, err := strconv.Atoi(id) // converts string to integer
 	if err != nil {
 		restErr := rest_err.NewBadRequest(
@@ -20,9 +27,9 @@ func SetTaskDone(id string) *rest_err.RestErr {
 		return restErr
 	}
 
-	for _, t := range repository.TaskRepository {
+	for idx, t := range repository.TaskRepository {
 		if t.GetId() == intId {
-			repository.TaskRepository[intId].SetCompleted(true)
+			repository.TaskRepository[idx].SetCompleted(true)
 			return nil
 		}
 	}

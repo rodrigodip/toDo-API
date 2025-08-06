@@ -18,6 +18,10 @@ import (
 // @Failure 404 {object} rest_err.RestErr "Error: ID not found"
 // @Router /allTasks [get]
 func GetTasksAll(c *gin.Context) {
-	tasks := service.GetAllTasks()
+	tasks, err := service.GetAllTasks()
+	if err != nil {
+		c.JSON(err.Code, err.Message)
+	}
+
 	c.JSON(http.StatusOK, tasks)
 }

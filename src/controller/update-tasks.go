@@ -24,10 +24,10 @@ import (
 // @Router /updateTask/{TaskId} [put]
 func UpdateTask(c *gin.Context) {
 
-	var taskToUpdate request.TaskRequest
+	var dataToUpdate request.TaskRequest
 	taskId := c.Param("id")
 
-	if err := c.ShouldBindJSON(&taskToUpdate); err != nil {
+	if err := c.ShouldBindJSON(&dataToUpdate); err != nil {
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintf("Bad request body.\nError = %s\n", err.Error()),
 		)
@@ -35,10 +35,11 @@ func UpdateTask(c *gin.Context) {
 		return
 	}
 
-	task, err := service.UpdateTaskByID(taskId, taskToUpdate)
+	err := service.UpdateTaskByID(taskId, dataToUpdate)
 	if err != nil {
 		c.JSON(err.Code, err.Message)
 		return
 	}
-	c.JSON(http.StatusOK, task)
+	sucessMessage := fmt.Sprintf("Task [id:%s] was Updated.", taskId)
+	c.JSON(http.StatusOK, sucessMessage)
 }

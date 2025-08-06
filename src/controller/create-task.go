@@ -32,6 +32,9 @@ func CreateTask(c *gin.Context) {
 		c.JSON(restErr.Code, restErr)
 		return
 	}
-	newTask := service.CreateTask(taskRequest)
+	newTask, err := service.CreateTask(taskRequest)
+	if err != nil {
+		c.JSON(err.Code, err.Message)
+	}
 	c.JSON(http.StatusCreated, newTask)
 }

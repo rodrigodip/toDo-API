@@ -12,6 +12,13 @@ func DeleteTaskByID(id string) *rest_err.RestErr {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
+	if len(repository.TaskRepository) < 1 {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintln("Error: No Tasks Found"),
+		)
+		return restErr
+	}
+
 	intId, err := strconv.Atoi(id) // converts string to integer
 	if err != nil {
 		restErr := rest_err.NewBadRequest(
