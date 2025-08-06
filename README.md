@@ -54,6 +54,9 @@ go run main.go
 
 ## Testing the Application
 Após rodar o projeto, visite [http://localhost:8081/swagger/index.html#](http://localhost:8080/swagger/index.html#) para testar todos os end points.
+Também é possível usar ferramentas como [curl](https://curl.se/) ou [postman](https://www.postman.com/) para testar os endpoints. A seguir temos alguns exemplos de comandos da ferramenta `curl`:
+
+**Lembre-se de ajustar os comandos de acordo com sua necessidade.**
 
 - **Criar uma tarefa:**
 
@@ -76,10 +79,10 @@ Após rodar o projeto, visite [http://localhost:8081/swagger/index.html#](http:/
 - **Atualizar uma tarefa:**
 
   ```
-  curl -X PUT -H "Content-Type: application/json" -d '{"title": "Lavar o carro e a kombi", "description":"Comprar pasta de polir e sabão"}' http://localhost:8080/editTask/{id}
+  curl -X PUT -H "Content-Type: application/json" -d '{"title": "Lavar o carro e a kombi", "description":"Comprar pasta de polir e sabão"}' http://localhost:8080/updateTask/{id}
   ```
 
-- **Atualizar tarefa como concluída:**
+- **Atualizar uma tarefa como concluída:**
 
   ```
     curl -X PUT http://localhost:8080/setTaskDone/{id}
@@ -91,7 +94,6 @@ Após rodar o projeto, visite [http://localhost:8081/swagger/index.html#](http:/
     curl -X DELETE http://localhost:8080/deleteTask/{id}
   ```
 
-Lembre-se de ajustar os comandos de acordo com sua necessidade.
 
 ## Data Models
 
