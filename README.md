@@ -53,8 +53,7 @@ go run main.go
 ```
 
 ## Testing the Application
-
-The MeuPrimeiroCRUD em Go application offers REST endpoints for creating, listing, updating, and deleting users. You can use tools like [curl](https://curl.se/) or [Postman](https://www.postman.com/) to test the endpoints. Here are some `curl` command examples for testing the endpoints:
+Após rodar o projeto, visite [http://localhost:8081/swagger/index.html#](http://localhost:8080/swagger/index.html#) para testar todos os end points.
 
 - **Criar uma tarefa:**
 
