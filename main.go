@@ -1,10 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/rodrigodip/toDo-API/docs"
+	"github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/controller/routes"
-	"log"
 )
 
 // @title toDo-API
@@ -14,7 +16,10 @@ import (
 // @BasePath /
 // @schemes http
 // @license MIT
-func mains() {
+func main() {
+
+	database.NewDataBaseConnection()
+
 	router := gin.Default()
 	routes.InitGroup(&router.RouterGroup)
 	if err := router.Run(":8080"); err != nil {
