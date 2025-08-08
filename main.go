@@ -14,7 +14,7 @@ import (
 // @BasePath /
 // @schemes http
 // @license MIT
-func main() {
+func mains() {
 	router := gin.Default()
 	routes.InitGroup(&router.RouterGroup)
 	if err := router.Run(":8080"); err != nil {
