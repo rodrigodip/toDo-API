@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	database "github.com/rodrigodip/toDo-API/src/config/database/mysql"
+	"github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/response"
 	"github.com/rodrigodip/toDo-API/src/model"
@@ -23,7 +23,6 @@ func GetTaskByID(id string) (response.TaskResponse, *rest_err.RestErr) {
 
 	var retrieved model.TaskData
 
-	//db.First(&retrieved, id)
 	if err := db.First(&retrieved, id).Error; err != nil {
 
 		if errors.Is(err, gorm.ErrRecordNotFound) {

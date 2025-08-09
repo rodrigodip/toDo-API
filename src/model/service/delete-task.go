@@ -23,7 +23,7 @@ func DeleteTaskByID(id string) *rest_err.RestErr {
 	deleted := db.Unscoped().Delete(&model.TaskData{}, id)
 	if deleted.Error != nil {
 		restError := rest_err.NewInternalServerError(
-			fmt.Sprintf("DB error: %s", err),
+			fmt.Sprintf("DB error: %s", deleted.Error),
 		)
 		return restError
 	}

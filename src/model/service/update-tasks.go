@@ -1,45 +1,47 @@
 package service
 
 import (
+	"errors"
 	"fmt"
-	"strconv"
 
+	"github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/request"
-	"github.com/rodrigodip/toDo-API/src/model/repository"
+	"github.com/rodrigodip/toDo-API/src/controller/model/response"
+	"github.com/rodrigodip/toDo-API/src/model"
+	"gorm.io/gorm"
 )
 
 func UpdateTaskByID(id string, req request.TaskRequest) *rest_err.RestErr {
+
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
-	if len(repository.TaskRepository) < 1 {
-		restErr := rest_err.NewNotFoundError(
-			fmt.Sprintln("Error: No Tasks Found"),
-		)
-		return restErr
-	}
-
-	intId, err := strconv.Atoi(id) // converts string to integer
+	db, err := database.GetDB()
 	if err != nil {
-		restErr := rest_err.NewBadRequest(
-			fmt.Sprintln("Error: ID must be a number"),
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
 		)
-		return restErr
+		return restError
 	}
 
-	for idx, t := range repository.TaskRepository {
+	var task model.TaskData
+	if err := db.First(&task, id).Error; err != nil {
 
-		if t.GetId() == uint(intId) {
-			repository.TaskRepository[idx].SetTitle(req.Title)
-			repository.TaskRepository[idx].SetDescription(req.Description)
-
-			return nil
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			restError := rest_err.NewNotFoundError(
+				fmt.Sprintf("no task found with [id:%s]", id),
+			)
+			return restError
 		}
+		//if it isn't a NotFound it's a InternalError
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
+		)
+		return restError
 	}
-	restErr := rest_err.NewNotFoundError(
-		fmt.Sprintln("Error: ID not Found"),
-	)
 
-	return restErr
+	db.Model(&task).Select("Title", "Description").Updates(response.TaskResponse{Title: req.Title, Description: req.Description})
+
+	return nil
 }
