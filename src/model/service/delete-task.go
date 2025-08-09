@@ -2,39 +2,37 @@ package service
 
 import (
 	"fmt"
-	"strconv"
 
+	"github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
-	"github.com/rodrigodip/toDo-API/src/model/repository"
+	"github.com/rodrigodip/toDo-API/src/model"
 )
 
 func DeleteTaskByID(id string) *rest_err.RestErr {
 	taskMux.Lock()
 	defer taskMux.Unlock()
 
-	if len(repository.TaskRepository) < 1 {
-		restErr := rest_err.NewNotFoundError(
-			fmt.Sprintln("Error: No Tasks Found"),
-		)
-		return restErr
-	}
-
-	intId, err := strconv.Atoi(id) // converts string to integer
+	db, err := database.GetDB()
 	if err != nil {
-		restErr := rest_err.NewBadRequest(
-			fmt.Sprintln("Error: ID must be a number"),
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
 		)
-		return restErr
+		return restError
 	}
 
-	for i, t := range repository.TaskRepository {
-		if t.GetId() == uint(intId) {
-			repository.DeleteTask(i)
-			return nil
-		}
+	deleted := db.Unscoped().Delete(&model.TaskData{}, id)
+	if deleted.Error != nil {
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
+		)
+		return restError
 	}
-	restErr := rest_err.NewNotFoundError(
-		fmt.Sprintln("Error: Task not Found"),
-	)
-	return restErr
+	if deleted.RowsAffected == 0 {
+		restError := rest_err.NewNotFoundError(
+			fmt.Sprintf("no task found with [id:%s]", id),
+		)
+		return restError
+	}
+
+	return nil
 }
