@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	_ "github.com/rodrigodip/toDo-API/docs"
 	"github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/controller/routes"
@@ -18,21 +19,30 @@ import (
 // @schemes http
 // @license MIT
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	if err := database.NewDataBaseConnection(); err != nil {
+	err = database.NewDataBaseConnection()
+	if err != nil {
 		panic("error opening connection")
 	}
+
 	db, err := database.GetDB()
 	if err != nil {
 		panic("error getting connection")
 	}
-	if err := db.AutoMigrate(&model.TaskData{}); err != nil {
+
+	err = db.AutoMigrate(&model.TaskData{})
+	if err != nil {
 		panic("erro migrating")
 	}
 
 	router := gin.Default()
 	routes.InitGroup(&router.RouterGroup)
-	if err := router.Run(":8080"); err != nil {
+	err = router.Run(":8080")
+	if err != nil {
 		log.Fatal(err)
 	}
 }
