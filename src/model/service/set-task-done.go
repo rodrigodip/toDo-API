@@ -28,7 +28,7 @@ func SetTaskDone(id string) *rest_err.RestErr {
 	}
 
 	for idx, t := range repository.TaskRepository {
-		if t.GetId() == intId {
+		if t.GetId() == uint(intId) {
 			repository.TaskRepository[idx].SetCompleted(true)
 			return nil
 		}

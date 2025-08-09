@@ -18,8 +18,8 @@ func GetAllTasks() ([]response.TaskResponse, *rest_err.RestErr) {
 
 	var tasks []response.TaskResponse
 
-	for _, t := range repository.TaskRepository {
-		tasks = append(tasks, response.TaskResponse(t.GetAll()))
-	}
+	//	for _, t := range repository.TaskRepository {
+	//		tasks = append(tasks, response.TaskResponse(t.GetAll()))
+	//	}
 	return tasks, nil
 }

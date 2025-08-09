@@ -1,18 +1,21 @@
 package model
 
+import "gorm.io/gorm"
+
 type TaskData struct {
-	ID          int
+	gorm.Model
+	ID          uint `gorm:"primarykey"`
 	Title       string
 	Description string
-	Completed   bool
+	Completed   bool `gorm:"default=false"`
 }
 
-func (td *TaskData) SetId(id int) {
+func (td *TaskData) SetId(id uint) {
 
 	td.ID = id
 }
 
-func (td *TaskData) GetId() int {
+func (td *TaskData) GetId() uint {
 	return td.ID
 }
 

@@ -28,7 +28,7 @@ func DeleteTaskByID(id string) *rest_err.RestErr {
 	}
 
 	for i, t := range repository.TaskRepository {
-		if t.GetId() == intId {
+		if t.GetId() == uint(intId) {
 			repository.DeleteTask(i)
 			return nil
 		}

@@ -27,7 +27,7 @@ func GetTaskByID(id string) (response.TaskResponse, *rest_err.RestErr) {
 	}
 
 	for _, t := range repository.TaskRepository {
-		if t.GetId() == intId {
+		if t.GetId() == uint(intId) {
 			return response.TaskResponse{
 				ID:          t.ID,
 				Title:       t.Title,

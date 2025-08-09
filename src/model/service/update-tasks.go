@@ -30,7 +30,7 @@ func UpdateTaskByID(id string, req request.TaskRequest) *rest_err.RestErr {
 
 	for idx, t := range repository.TaskRepository {
 
-		if t.GetId() == intId {
+		if t.GetId() == uint(intId) {
 			repository.TaskRepository[idx].SetTitle(req.Title)
 			repository.TaskRepository[idx].SetDescription(req.Description)
 
