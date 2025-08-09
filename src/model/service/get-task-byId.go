@@ -1,44 +1,48 @@
 package service
 
 import (
+	"errors"
 	"fmt"
-	"strconv"
 
+	database "github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/response"
-	"github.com/rodrigodip/toDo-API/src/model/repository"
+	"github.com/rodrigodip/toDo-API/src/model"
+	"gorm.io/gorm"
 )
 
 func GetTaskByID(id string) (response.TaskResponse, *rest_err.RestErr) {
 
-	if len(repository.TaskRepository) < 1 {
-		restErr := rest_err.NewNotFoundError(
-			fmt.Sprintln("Error: No Tasks Found"),
-		)
-		return response.TaskResponse{}, restErr
-	}
-
-	intId, err := strconv.Atoi(id) // converts string to integer
+	db, err := database.GetDB()
 	if err != nil {
-		restErr := rest_err.NewBadRequest(
-			fmt.Sprintln("Error: ID must be a number"),
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
 		)
-		return response.TaskResponse{}, restErr
+		return response.TaskResponse{}, restError
 	}
 
-	for _, t := range repository.TaskRepository {
-		if t.GetId() == uint(intId) {
-			return response.TaskResponse{
-				ID:          t.ID,
-				Title:       t.Title,
-				Description: t.Description,
-				Completed:   t.Completed,
-			}, nil
+	var retrieved model.TaskData
+
+	//db.First(&retrieved, id)
+	if err := db.First(&retrieved, id).Error; err != nil {
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			restError := rest_err.NewNotFoundError(
+				fmt.Sprintf("no task found with [id:%s]", id),
+			)
+			return response.TaskResponse{}, restError
 		}
+		//if it isn't a NotFound it's a InternalError
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
+		)
+		return response.TaskResponse{}, restError
 	}
 
-	restErr := rest_err.NewNotFoundError(
-		fmt.Sprintln("Error: ID not Found"),
-	)
-	return response.TaskResponse{}, restErr
+	return response.TaskResponse{
+		ID:          retrieved.ID,
+		Title:       retrieved.Title,
+		Description: retrieved.Description,
+		Completed:   retrieved.Completed,
+	}, nil
 }
