@@ -10,27 +10,22 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	DB       *gorm.DB
-	DB_PASS  string
-	dbConfig = map[string]string{
-		"host":   "127.0.0.1",
-		"port":   "3306",
-		"user":   "rodrigodip",
-		"dbname": "todo_api",
-	}
-)
+var DB *gorm.DB
 
 func NewDataBaseConnection() error {
 
-	DB_PASS = os.Getenv("SQL_DB_PASS")
+	db_user := os.Getenv("DB_USER")
+	db_pass := os.Getenv("DB_PASSWORD")
+	db_host := os.Getenv("DB_HOST")
+	db_port := os.Getenv("DB_PORT")
+	db_name := os.Getenv("DB_NAME")
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		dbConfig["user"],
-		DB_PASS,
-		dbConfig["host"],
-		dbConfig["port"],
-		dbConfig["dbname"],
+		db_user,
+		db_pass,
+		db_host,
+		db_port,
+		db_name,
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -51,16 +46,33 @@ func NewDataBaseConnection() error {
 	DB = db
 	return nil
 }
+
 func GetDB() (*gorm.DB, error) {
 
-	sqlDB, err := DB.DB()
+	_, err := DB.DB()
 	if err != nil {
 		panic("Error Getting DB")
 	}
+	return DB, nil
+}
 
-	if err = sqlDB.Ping(); err != nil {
-		panic("error pinging DB")
+func PingDB(db *gorm.DB) error {
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Panic("Erro getting DB on Waiting for server")
 	}
 
-	return DB, nil
+	maxAttempts := 10
+	for attempts := 1; attempts <= maxAttempts; attempts++ {
+		if err = sqlDB.Ping(); err == nil {
+			break
+		}
+		time.Sleep(time.Duration(attempts) * time.Second)
+	}
+	if err != nil {
+		panic(fmt.Sprintf("Failed to connect database after %d attempts: %v", maxAttempts, err))
+	}
+
+	return nil
 }

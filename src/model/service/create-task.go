@@ -11,10 +11,7 @@ import (
 	"github.com/rodrigodip/toDo-API/src/model"
 )
 
-var (
-	taskMux sync.Mutex
-	nextID  = 1
-)
+var taskMux sync.Mutex
 
 func CreateTask(req request.TaskRequest) (response.TaskResponse, *rest_err.RestErr) {
 	taskMux.Lock()

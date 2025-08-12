@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 	_ "github.com/rodrigodip/toDo-API/docs"
 	"github.com/rodrigodip/toDo-API/src/config/database/mysql"
 	"github.com/rodrigodip/toDo-API/src/controller/routes"
@@ -19,12 +19,8 @@ import (
 // @schemes http
 // @license MIT
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 
-	err = database.NewDataBaseConnection()
+	err := database.NewDataBaseConnection()
 	if err != nil {
 		panic("error opening connection")
 	}
