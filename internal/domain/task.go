@@ -1,41 +1,30 @@
-package model
+package domain
 
-import "gorm.io/gorm"
+import (
+	"errors"
+)
 
-type TaskData struct {
-	gorm.Model
-	ID          uint `gorm:"primarykey"`
+type Task struct {
+	ID          string
 	Title       string
 	Description string
-	Completed   bool `gorm:"default=false"`
+	Completed   bool
 }
 
-func (td *TaskData) SetId(id uint) {
-
-	td.ID = id
+func NewTask() *Task {
+	return &Task{}
 }
 
-func (td *TaskData) GetId() uint {
-	return td.ID
-}
-
-func (td *TaskData) SetTitle(title string) {
-	td.Title = title
-}
-
-func (td *TaskData) SetDescription(description string) {
-	td.Description = description
-}
-
-func (td *TaskData) SetCompleted(completed bool) {
-	td.Completed = completed
-}
-
-func (td *TaskData) GetAll() TaskData {
-	return TaskData{
-		ID:          td.ID,
-		Title:       td.Title,
-		Description: td.Description,
-		Completed:   td.Completed,
+func (t *Task) TaskValidation() error {
+	if t.Title == "" {
+		return errors.New("O título é obnrigatório")
 	}
+	if len(t.Title) < 30 {
+		return errors.New("O titulo não pode ter mais que 30 characters.")
+	}
+	// NOTE: Description é opcional, preciso checar existência primeiro?
+	if len(t.Description) < 50 {
+		return errors.New("A Description não pode ter mais que 50 characters.")
+	}
+	return nil
 }
