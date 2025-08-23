@@ -1,8 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	tools "github.com/rodrigodip/toDo-API/pkg/id_generator"
+
+	"github.com/joho/godotenv"
+	"github.com/rodrigodip/toDo-API/internal/aplication/usecase"
+	"github.com/rodrigodip/toDo-API/internal/infra/db/mysql"
+	"github.com/rodrigodip/toDo-API/internal/infra/repository"
 )
 
 // @title toDo-API
@@ -12,10 +17,27 @@ import (
 // @BasePath /
 // @schemes http
 // @license MIT
-	// err := database.NewDataBaseConnection()
-	// if err != nil {
-	// 	panic("error opening connection")
-	// }
+func main() {
+	godotenv.Load()
+	db, err := mysql.NewDataBaseConnection()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	repo := repository.NewTaskRepositoryDB(db)
+	service := usecase.Newtask(repo)
+	imput := usecase.CreateTaskRequest{
+		Title:       "Minha primeira task",
+		Description: "ela funciona!",
+	}
+	output, err := service.Create(imput)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	jsonOutput, err := json.Marshal(output)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Printf("Saved: %s", jsonOutput)
 	//
 	// db, err := database.GetDB()
 	// if err != nil {
