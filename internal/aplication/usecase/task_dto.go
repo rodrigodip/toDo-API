@@ -1,13 +1,13 @@
 package usecase
 
 type CreateTaskRequest struct {
-	Title       string
-	Description string
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 type TaskDtoOutput struct {
-	ID          string
-	Title       string
-	Description string
-	Completed   bool
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"decription"`
+	Completed   bool   `json:"completed"`
 }

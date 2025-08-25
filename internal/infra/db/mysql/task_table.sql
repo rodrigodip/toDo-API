@@ -1,0 +1,6 @@
+CREATE TABLE tasks (
+    id CHAR(3) NOT NULL PRIMARY KEY,
+    title VARCHAR(30) NOT NULL,
+    description VARCHAR(50) NOT NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE
+);

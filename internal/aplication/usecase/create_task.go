@@ -27,5 +27,6 @@ func (ct *CreateTask) Create(input CreateTaskRequest) (TaskDtoOutput, error) {
 		Description: newTask.Description,
 		Completed:   false,
 	}
+	err = ct.Repository.Create(output.ID, output.Title, output.Description, output.Completed)
 	return output, nil
 }

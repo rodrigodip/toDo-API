@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/joho/godotenv"
+	"github.com/rodrigodip/toDo-API/internal/api/http/handler"
 	"github.com/rodrigodip/toDo-API/internal/aplication/usecase"
-	"github.com/rodrigodip/toDo-API/internal/infra/db/mysql"
-	"github.com/rodrigodip/toDo-API/internal/infra/repository"
+	"github.com/rodrigodip/toDo-API/internal/domain"
 )
 
 // @title toDo-API
@@ -19,29 +19,22 @@ import (
 // @license MIT
 func main() {
 	godotenv.Load()
-	db, err := mysql.NewDataBaseConnection()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	repo := repository.NewTaskRepositoryDB(db)
-	service := usecase.Newtask(repo)
 	imput := usecase.CreateTaskRequest{
-		Title:       "Minha primeira task",
-		Description: "ela funciona!",
+		Title:       "teste handler",
+		Description: "handler funciona!",
 	}
-	output, err := service.Create(imput)
+	var service domain.TaskRepository
+	handler := handler.NewTaskHandler(service)
+	newTesk, err := handler.Create(imput)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	jsonOutput, err := json.Marshal(output)
+	output, err := json.Marshal(newTesk)
 	if err != nil {
+
 		fmt.Println(err.Error())
 	}
-	fmt.Printf("Saved: %s", jsonOutput)
-	//
-	// db, err := database.GetDB()
-	// if err != nil {
-	// 	panic("error getting connection")
+	fmt.Println(string(output))
 	// }
 	//
 	// err = db.AutoMigrate(&model.TaskData{})

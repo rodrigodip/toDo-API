@@ -1,4 +1,4 @@
-package database
+package mysql
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 
 var DB *gorm.DB
 
-func NewDataBaseConnection() error {
+func NewDataBaseConnection() (*gorm.DB, error) {
 
 	db_user := os.Getenv("DB_USER")
 	db_pass := os.Getenv("DB_PASSWORD")
@@ -30,7 +30,7 @@ func NewDataBaseConnection() error {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatalf("failed to connect database: %v", err)
 	}
 
 	sqlDB, err := db.DB()
@@ -43,8 +43,7 @@ func NewDataBaseConnection() error {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	log.Println("Database connection established")
-	DB = db
-	return nil
+	return db, nil
 }
 
 func GetDB() (*gorm.DB, error) {

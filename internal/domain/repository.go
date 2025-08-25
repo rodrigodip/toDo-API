@@ -1,5 +1,10 @@
 package domain
 
 type TaskRepository interface {
-	insert(id, title, description string, completed bool) error
+	Create(id, title, description string, completed bool) error
+	//GetTask
+	//GetTasks
+	//UpdateTask
+	//DeleteTask
+	//SetTaskDone
 }
