@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	rest_err "github.com/rodrigodip/toDo-API/pkg/errors/rest-err"
 	"github.com/rodrigodip/toDo-API/src/config/rest-err"
 	"github.com/rodrigodip/toDo-API/src/controller/model/request"
 	"github.com/rodrigodip/toDo-API/src/model/service"
@@ -24,7 +25,6 @@ import (
 func CreateTask(c *gin.Context) {
 
 	var taskRequest request.TaskRequest
-
 	if err := c.ShouldBindJSON(&taskRequest); err != nil {
 		restErr := rest_err.NewBadRequest(
 			fmt.Sprintf("There are some incorrect fields.\nError = %s\n", err.Error()),

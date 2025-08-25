@@ -7,6 +7,7 @@ import (
 	"github.com/rodrigodip/toDo-API/internal/domain"
 	"github.com/rodrigodip/toDo-API/internal/infra/db/mysql"
 	"github.com/rodrigodip/toDo-API/internal/infra/repository"
+	rest_err "github.com/rodrigodip/toDo-API/pkg/errors/rest-err"
 )
 
 type taskHandler struct {
@@ -14,14 +15,14 @@ type taskHandler struct {
 }
 
 type TaskHandler interface {
-	Create(input usecase.CreateTaskRequest) (usecase.TaskDtoOutput, error)
+	Create(input usecase.CreateTaskRequest) (usecase.TaskDtoOutput, *rest_err.RestErr)
 }
 
 func NewTaskHandler(t domain.TaskRepository) TaskHandler {
 	return &taskHandler{TaskRepository: t}
 }
 
-func (th *taskHandler) Create(input usecase.CreateTaskRequest) (usecase.TaskDtoOutput, error) {
+func (th *taskHandler) Create(input usecase.CreateTaskRequest) (usecase.TaskDtoOutput, *rest_err.RestErr) {
 	db, err := mysql.NewDataBaseConnection()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -36,7 +37,11 @@ func (th *taskHandler) Create(input usecase.CreateTaskRequest) (usecase.TaskDtoO
 	var output usecase.TaskDtoOutput
 	output, err = service.Create(req)
 	if err != nil {
-		return usecase.TaskDtoOutput{}, err
+		restError := rest_err.NewInternalServerError(
+			fmt.Sprintf("DB error: %s", err),
+		)
+
+		return usecase.TaskDtoOutput{}, restError
 	}
 
 	return output, nil

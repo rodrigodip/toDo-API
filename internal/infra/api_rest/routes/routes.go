@@ -2,18 +2,19 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/rodrigodip/toDo-API/internal/api/http/controller"
+	// swaggerfiles "github.com/swaggo/files"
+	// ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func InitGroup(r *gin.RouterGroup) {
-	r.POST("/createTask", controller.CreateTask)
-	r.GET("/allTasks", controller.GetTasksAll)
-	r.GET("/taskById/:id", controller.GetTaskById)
-	r.PUT("/updateTask/:id", controller.UpdateTask)
-	r.PUT("/setTaskDone/:id", controller.SetTaskDone)
-	r.DELETE("/deleteTask/:id", controller.DeleteTask)
+func InitGroup(r *gin.RouterGroup, app controller.TaskController) {
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.POST("/createTask", app.Create)
+	// r.GET("/allTasks", controller.GetTasksAll)
+	// r.GET("/taskById/:id", controller.GetTaskById)
+	// r.PUT("/updateTask/:id", controller.UpdateTask)
+	// r.PUT("/setTaskDone/:id", controller.SetTaskDone)
+	// r.DELETE("/deleteTask/:id", controller.DeleteTask)
+	//
+	//r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }

@@ -1,13 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"log"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/rodrigodip/toDo-API/internal/api/http/handler"
-	"github.com/rodrigodip/toDo-API/internal/aplication/usecase"
-	"github.com/rodrigodip/toDo-API/internal/domain"
+	"github.com/rodrigodip/toDo-API/internal/infra/api_rest/routes"
+	"github.com/rodrigodip/toDo-API/internal/infra/db/mysql"
+	"github.com/rodrigodip/toDo-API/pkg/dependencies"
 )
 
 // @title toDo-API
@@ -19,33 +20,15 @@ import (
 // @license MIT
 func main() {
 	godotenv.Load()
-	imput := usecase.CreateTaskRequest{
-		Title:       "teste handler",
-		Description: "handler funciona!",
-	}
-	var service domain.TaskRepository
-	handler := handler.NewTaskHandler(service)
-	newTesk, err := handler.Create(imput)
+	router := gin.Default()
+	database, err := mysql.NewDataBaseConnection()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	output, err := json.Marshal(newTesk)
+	userController := dependencies.Init(database)
+	routes.InitGroup(&router.RouterGroup, userController)
+	err = router.Run(":8080")
 	if err != nil {
-
-		fmt.Println(err.Error())
+		log.Fatal(err)
 	}
-	fmt.Println(string(output))
-	// }
-	//
-	// err = db.AutoMigrate(&model.TaskData{})
-	// if err != nil {
-	// 	panic("erro migrating")
-	// }
-	//
-	// router := gin.Default()
-	// routes.InitGroup(&router.RouterGroup)
-	// err = router.Run(":8080")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 }
