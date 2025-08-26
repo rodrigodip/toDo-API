@@ -17,7 +17,7 @@ import (
 // @host localhost:8080
 // @BasePath /
 // @schemes http
-// @license MIT
+// @
 func main() {
 	godotenv.Load()
 	router := gin.Default()

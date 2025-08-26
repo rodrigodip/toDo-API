@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type task struct {
+type Task struct {
 	ID          string
 	Title       string
 	Description string
@@ -18,13 +18,13 @@ func NewTaskRepositoryDB(database *gorm.DB) *taskRepositoryDB {
 	return &taskRepositoryDB{mysqlDB: database}
 }
 
-type TaskRepositoryDB interface {
+type TaskRepository interface {
 	Create(id, title, description string, completed bool) error
 }
 
 func (t *taskRepositoryDB) Create(id, title, description string, completed bool) error {
 
-	newTask := task{
+	newTask := Task{
 		ID:          id,
 		Title:       title,
 		Description: description,

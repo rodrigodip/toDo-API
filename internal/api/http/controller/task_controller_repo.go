@@ -24,7 +24,6 @@ func NewTaskController(tu usecase.CreateTask) TaskController {
 	return &taskController{taskUsecase: tu}
 }
 
-// CreateUser create a user in the postgres database
 func (tc *taskController) Create(c *gin.Context) {
 
 	var taskRequest usecase.CreateTaskRequest
