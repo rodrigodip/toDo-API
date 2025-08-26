@@ -28,5 +28,8 @@ func (ct *CreateTask) Create(input CreateTaskRequest) (TaskDtoOutput, error) {
 		Completed:   false,
 	}
 	err = ct.Repository.Create(output.ID, output.Title, output.Description, output.Completed)
+	if err != nil {
+		return TaskDtoOutput{}, err
+	}
 	return output, nil
 }
