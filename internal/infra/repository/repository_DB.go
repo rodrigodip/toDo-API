@@ -30,3 +30,22 @@ func (t *taskRepositoryDB) GetTasks() ([]domain.Task, error) {
 	result := t.mysqlDB.Find(&tasks)
 	return tasks, result.Error
 }
+func (t *taskRepositoryDB) GetTask(id string) (domain.Task, error) {
+	var task domain.Task
+	result := t.mysqlDB.First(&task, id)
+	return task, result.Error
+}
+func (t *taskRepositoryDB) UpdateTask(id string) (domain.Task, error) {
+	var task domain.Task
+
+	return task, nil
+}
+func (t *taskRepositoryDB) DeleteTask(id string) (domain.Task, error) {
+	var task domain.Task
+
+	return task, nil
+}
+func (t *taskRepositoryDB) SetTaskDone(id string) error {
+
+	return nil
+}

@@ -50,3 +50,33 @@ func (ct *CreateTask) GetTasks() ([]TaskDtoOutput, error) {
 	}
 	return output, nil
 }
+func (ct *CreateTask) GetTask(id string) (TaskDtoOutput, error) {
+	var task domain.Task
+	task, err := ct.Repository.GetTask(id)
+	if err != nil {
+		return TaskDtoOutput{}, nil
+	}
+
+	output := TaskDtoOutput{
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: task.Description,
+		Completed:   task.Completed,
+	}
+
+	return output, nil
+}
+func UpdateTask(id string) (TaskDtoOutput, error) {
+	var task TaskDtoOutput
+
+	return task, nil
+}
+func DeleteTask(id string) (TaskDtoOutput, error) {
+	var task TaskDtoOutput
+
+	return task, nil
+}
+func SetTaskDone(id string) error {
+
+	return nil
+}

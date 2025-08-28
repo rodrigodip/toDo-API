@@ -66,3 +66,22 @@ func (r *taskRepositoryFS) GetTasks() ([]domain.Task, error) {
 
 	return tasks, nil
 }
+func (r *taskRepositoryFS) GetTask(id string) (domain.Task, error) {
+	var task domain.Task
+
+	return task, nil
+}
+func (t *taskRepositoryFS) UpdateTask(id string) (domain.Task, error) {
+	var task domain.Task
+
+	return task, nil
+}
+func (t *taskRepositoryFS) DeleteTask(id string) (domain.Task, error) {
+	var task domain.Task
+
+	return task, nil
+}
+func (t *taskRepositoryFS) SetTaskDone(id string) error {
+
+	return nil
+}

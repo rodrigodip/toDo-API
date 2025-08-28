@@ -15,6 +15,7 @@ type taskController struct {
 type TaskController interface {
 	Create(c *gin.Context)
 	GetTasks(c *gin.Context)
+	GetTask(c *gin.Context)
 }
 
 func NewTaskController(tu usecase.CreateTask) TaskController {
@@ -51,4 +52,16 @@ func (tc *taskController) GetTasks(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, allTasks)
+}
+func (tc *taskController) GetTask(c *gin.Context) {
+	taskId := c.Param("id")
+	task, err := tc.taskUsecase.GetTask(taskId)
+	if err != nil {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintf("No tasks found.\n Error: %s\n", err.Error()),
+		)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	c.JSON(http.StatusOK, task)
 }
