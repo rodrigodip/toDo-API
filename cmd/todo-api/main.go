@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	userController := dependencies.Init(database)
+	userController, _ := dependencies.Init(database)
 	routes.InitGroup(&router.RouterGroup, userController)
 	err = router.Run(":8080")
 	if err != nil {

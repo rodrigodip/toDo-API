@@ -8,16 +8,13 @@ import (
 	"net/http"
 )
 
-type AppController struct {
-	Task interface{ TaskController }
-}
-
 type taskController struct {
 	taskUsecase usecase.CreateTask
 }
 
 type TaskController interface {
 	Create(c *gin.Context)
+	GetTasks(c *gin.Context)
 }
 
 func NewTaskController(tu usecase.CreateTask) TaskController {
@@ -43,4 +40,15 @@ func (tc *taskController) Create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, newTask)
+}
+func (tc *taskController) GetTasks(c *gin.Context) {
+	allTasks, err := tc.taskUsecase.GetTasks()
+	if err != nil {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintf("No tasks found.\n Error: %s\n", err.Error()),
+		)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	c.JSON(http.StatusOK, allTasks)
 }

@@ -10,7 +10,7 @@ import (
 func InitGroup(r *gin.RouterGroup, app controller.TaskController) {
 
 	r.POST("/createTask", app.Create)
-	// r.GET("/allTasks", controller.GetTasksAll)
+	r.GET("/allTasks", app.GetTasks)
 	// r.GET("/taskById/:id", controller.GetTaskById)
 	// r.PUT("/updateTask/:id", controller.UpdateTask)
 	// r.PUT("/setTaskDone/:id", controller.SetTaskDone)
