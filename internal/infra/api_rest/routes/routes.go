@@ -14,7 +14,7 @@ func InitGroup(r *gin.RouterGroup, app controller.TaskController) {
 	r.GET("/taskById/:id", app.GetTask)
 	// r.PUT("/updateTask/:id", controller.UpdateTask)
 	// r.PUT("/setTaskDone/:id", controller.SetTaskDone)
-	// r.DELETE("/deleteTask/:id", controller.DeleteTask)
+	r.DELETE("/deleteTask/:id", app.DeleteTask)
 	//
 	//r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }

@@ -16,6 +16,7 @@ type TaskController interface {
 	Create(c *gin.Context)
 	GetTasks(c *gin.Context)
 	GetTask(c *gin.Context)
+	DeleteTask(c *gin.Context)
 }
 
 func NewTaskController(tu usecase.CreateTask) TaskController {
@@ -64,4 +65,17 @@ func (tc *taskController) GetTask(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, task)
+}
+func (tc *taskController) DeleteTask(c *gin.Context) {
+	taskId := c.Param("id")
+	err := tc.taskUsecase.DeleteTask(taskId)
+	if err != nil {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintf("No tasks found.\n Error: %s\n", err.Error()),
+		)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	c.JSON(http.StatusOK, "Task Deleted.")
+
 }

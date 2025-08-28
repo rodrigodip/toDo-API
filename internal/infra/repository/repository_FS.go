@@ -76,10 +76,9 @@ func (t *taskRepositoryFS) UpdateTask(id string) (domain.Task, error) {
 
 	return task, nil
 }
-func (t *taskRepositoryFS) DeleteTask(id string) (domain.Task, error) {
-	var task domain.Task
+func (t *taskRepositoryFS) DeleteTask(id string) error {
 
-	return task, nil
+	return nil
 }
 func (t *taskRepositoryFS) SetTaskDone(id string) error {
 

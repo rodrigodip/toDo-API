@@ -14,6 +14,6 @@ type TaskRepository interface {
 	GetTasks() ([]domain.Task, error)
 	GetTask(id string) (domain.Task, error)
 	UpdateTask(id string) (domain.Task, error)
-	DeleteTask(id string) (domain.Task, error)
+	DeleteTask(id string) error
 	SetTaskDone(id string) error
 }

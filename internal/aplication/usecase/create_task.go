@@ -71,10 +71,12 @@ func UpdateTask(id string) (TaskDtoOutput, error) {
 
 	return task, nil
 }
-func DeleteTask(id string) (TaskDtoOutput, error) {
-	var task TaskDtoOutput
-
-	return task, nil
+func (ct *CreateTask) DeleteTask(id string) error {
+	err := ct.Repository.DeleteTask(id)
+	if err != nil {
+		return nil
+	}
+	return nil
 }
 func SetTaskDone(id string) error {
 

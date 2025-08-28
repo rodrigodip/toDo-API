@@ -5,6 +5,6 @@ type TaskRepository interface {
 	GetTasks() ([]Task, error)
 	GetTask(id string) (Task, error)
 	UpdateTask(id string) (Task, error)
-	DeleteTask(id string) (Task, error)
+	DeleteTask(id string) error
 	SetTaskDone(id string) error
 }

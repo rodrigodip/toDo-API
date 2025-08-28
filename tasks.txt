@@ -1,8 +1,0 @@
-{"ID":"1","Title":"Comprar vazo planta","Description":"","Completed":false}
-{"ID":"2","Title":"Dentista","Description":"Checkar horário","Completed":false}
-{"ID":"3","Title":"Trocar a lâmpada","Description":"","Completed":false}
-{"ID":"4","Title":"Lavar o carro","Description":"Pegar aspirador de pó","Completed":false}
-{"ID":"1","Title":"Comprar vazo planta","Description":"","Completed":false}
-{"ID":"2","Title":"Dentista","Description":"Checkar horário","Completed":false}
-{"ID":"3","Title":"Trocar a lâmpada","Description":"","Completed":false}
-{"ID":"4","Title":"Lavar o carro","Description":"Pegar aspirador de pó","Completed":false}

@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/rodrigodip/toDo-API/internal/domain"
 	"gorm.io/gorm"
 )
@@ -40,10 +42,13 @@ func (t *taskRepositoryDB) UpdateTask(id string) (domain.Task, error) {
 
 	return task, nil
 }
-func (t *taskRepositoryDB) DeleteTask(id string) (domain.Task, error) {
+func (t *taskRepositoryDB) DeleteTask(id string) error {
 	var task domain.Task
-
-	return task, nil
+	deleted := t.mysqlDB.Unscoped().Delete(&task, id)
+	if deleted.RowsAffected == 0 {
+		return errors.New("DELETE: No Rowls Affected")
+	}
+	return deleted.Error
 }
 func (t *taskRepositoryDB) SetTaskDone(id string) error {
 
