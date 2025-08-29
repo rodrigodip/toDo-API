@@ -17,6 +17,7 @@ type TaskController interface {
 	GetTasks(c *gin.Context)
 	GetTask(c *gin.Context)
 	DeleteTask(c *gin.Context)
+	UpdateTask(c *gin.Context)
 }
 
 func NewTaskController(tu usecase.CreateTask) TaskController {
@@ -78,4 +79,23 @@ func (tc *taskController) DeleteTask(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, "Task Deleted.")
 
+}
+func (tc *taskController) UpdateTask(c *gin.Context) {
+	taskId := c.Param("id")
+	var dataToUpdate usecase.CreateTaskRequest
+	if err := c.ShouldBindJSON(&dataToUpdate); err != nil {
+		restErr := rest_err.NewBadRequest(
+			fmt.Sprintf("Bad request body.\n Error: %s", err.Error()),
+		)
+		c.JSON(restErr.Code, restErr.Message)
+	}
+	task, err := tc.taskUsecase.UpdateTask(taskId, dataToUpdate.Title, dataToUpdate.Description)
+	if err != nil {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintf("No tasks found.\n Error: %s\n", err.Error()),
+		)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	c.JSON(http.StatusOK, task)
 }

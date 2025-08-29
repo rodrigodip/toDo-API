@@ -16,7 +16,6 @@ func NewTaskRepositoryDB(database *gorm.DB) *taskRepositoryDB {
 }
 
 func (t *taskRepositoryDB) Create(id, title, description string, completed bool) error {
-
 	newTask := task{
 		ID:          id,
 		Title:       title,
@@ -32,16 +31,26 @@ func (t *taskRepositoryDB) GetTasks() ([]domain.Task, error) {
 	result := t.mysqlDB.Find(&tasks)
 	return tasks, result.Error
 }
+
 func (t *taskRepositoryDB) GetTask(id string) (domain.Task, error) {
 	var task domain.Task
 	result := t.mysqlDB.First(&task, id)
 	return task, result.Error
 }
-func (t *taskRepositoryDB) UpdateTask(id string) (domain.Task, error) {
-	var task domain.Task
 
-	return task, nil
+func (t *taskRepositoryDB) UpdateTask(id, title, description string) (domain.Task, error) {
+	var task domain.Task
+	result := t.mysqlDB.First(&task, id)
+	if result.Error != nil {
+		return domain.Task{}, result.Error
+	}
+	upDated := t.mysqlDB.Model(&task).Select("Title", "Description").Updates(domain.Task{
+		Title:       title,
+		Description: description})
+
+	return task, upDated.Error
 }
+
 func (t *taskRepositoryDB) DeleteTask(id string) error {
 	var task domain.Task
 	deleted := t.mysqlDB.Unscoped().Delete(&task, id)
@@ -50,6 +59,7 @@ func (t *taskRepositoryDB) DeleteTask(id string) error {
 	}
 	return deleted.Error
 }
+
 func (t *taskRepositoryDB) SetTaskDone(id string) error {
 
 	return nil

@@ -6,8 +6,8 @@ import (
 
 var lastID int
 
+// TODO: Função para receber o ultimo ID persistido no DB ou no FS
 func NewID() string {
-	// TODO: lastID deve receber o ultimo ID persistido no DB ou no FS
 
 	var newID int = lastID + 1
 	lastID = newID

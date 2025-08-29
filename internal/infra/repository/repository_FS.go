@@ -71,7 +71,7 @@ func (r *taskRepositoryFS) GetTask(id string) (domain.Task, error) {
 
 	return task, nil
 }
-func (t *taskRepositoryFS) UpdateTask(id string) (domain.Task, error) {
+func (t *taskRepositoryFS) UpdateTask(id, title, description string) (domain.Task, error) {
 	var task domain.Task
 
 	return task, nil

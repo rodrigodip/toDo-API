@@ -43,6 +43,6 @@ func Init(database *gorm.DB) (controller.TaskController, error) {
 	// 	return controller.TaskController{}, err
 	// }
 
-	service := usecase.Newtask(repo)
+	service := usecase.NewTaskRepository(repo)
 	return controller.NewTaskController(*service), nil
 }

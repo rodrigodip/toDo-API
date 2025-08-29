@@ -9,12 +9,12 @@ type CreateTask struct {
 	Repository domain.TaskRepository
 }
 
-func Newtask(repository domain.TaskRepository) *CreateTask {
+func NewTaskRepository(repository domain.TaskRepository) *CreateTask {
 	return &CreateTask{Repository: repository}
 }
 
 func (ct *CreateTask) Create(input CreateTaskRequest) (TaskDtoOutput, error) {
-	newTask := domain.NewTask()
+	newTask := domain.NewTaskDomain()
 	newTask.Title = input.Title
 	newTask.Description = input.Description
 	err := newTask.TaskValidation()
@@ -66,10 +66,26 @@ func (ct *CreateTask) GetTask(id string) (TaskDtoOutput, error) {
 
 	return output, nil
 }
-func UpdateTask(id string) (TaskDtoOutput, error) {
-	var task TaskDtoOutput
+func (ct *CreateTask) UpdateTask(id, title, description string) (TaskDtoOutput, error) {
+	newTask := domain.NewTaskDomain()
+	newTask.Title = title
+	newTask.Description = description
+	err := newTask.TaskValidation()
+	if err != nil {
+		return TaskDtoOutput{}, err
+	}
+	updated, err := ct.Repository.UpdateTask(id, newTask.Title, newTask.Description)
+	if err != nil {
+		return TaskDtoOutput{}, err
+	}
+	output := TaskDtoOutput{
+		ID:          id,
+		Title:       updated.Title,
+		Description: updated.Description,
+		Completed:   false,
+	}
 
-	return task, nil
+	return output, nil
 }
 func (ct *CreateTask) DeleteTask(id string) error {
 	err := ct.Repository.DeleteTask(id)
