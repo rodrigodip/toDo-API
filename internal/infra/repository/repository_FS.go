@@ -2,6 +2,7 @@ package repository
 
 import (
 	"encoding/json"
+	"errors"
 	"sync"
 
 	"os"
@@ -67,15 +68,96 @@ func (r *taskRepositoryFS) GetTasks() ([]domain.Task, error) {
 	return tasks, nil
 }
 func (r *taskRepositoryFS) GetTask(id string) (domain.Task, error) {
-	var task domain.Task
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
 
-	return task, nil
-}
-func (t *taskRepositoryFS) UpdateTask(id, title, description string) (domain.Task, error) {
-	var task domain.Task
+	file, err := os.Open(r.filePath)
+	if err != nil {
+		// If file doesn't exist yet, return empty
+		if os.IsNotExist(err) {
+			return domain.Task{}, errors.New("NotFoundError: File not found")
+		}
+		return domain.Task{}, err
+	}
+	defer file.Close()
 
-	return task, nil
+	decoder := json.NewDecoder(file)
+	for decoder.More() {
+		var task domain.Task
+		if err := decoder.Decode(&task); err != nil {
+			return domain.Task{}, err
+		}
+		if task.ID == id {
+			return task, nil
+		}
+	}
+	return domain.Task{}, errors.New("NotFoundError: Invalid ID")
+
 }
+func (r *taskRepositoryFS) UpdateTask(id, title, description string) (domain.Task, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	// Read all tasks
+	file, err := os.Open(r.filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return domain.Task{}, errors.New("NotFoundError: File not found")
+		}
+		return domain.Task{}, err
+	}
+	defer file.Close()
+
+	var tasks []domain.Task
+	decoder := json.NewDecoder(file)
+	for decoder.More() {
+		var task domain.Task
+		if err := decoder.Decode(&task); err != nil {
+			return domain.Task{}, err
+		}
+		tasks = append(tasks, task)
+	}
+
+	// Find and update the task
+	var updatedTask domain.Task
+	found := false
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Title = title
+			tasks[i].Description = description
+			updatedTask = tasks[i]
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return domain.Task{}, errors.New("NotFoundError: Invalid ID")
+	}
+
+	// Write all tasks back to file
+	tempFile := r.filePath + ".tmp"
+	newFile, err := os.Create(tempFile)
+	if err != nil {
+		return domain.Task{}, errors.New("Error: Invalid ID")
+	}
+	defer newFile.Close()
+
+	encoder := json.NewEncoder(newFile)
+	for _, task := range tasks {
+		if err := encoder.Encode(task); err != nil {
+			return domain.Task{}, err
+		}
+	}
+
+	// Replace the original file with the updated one
+	if err := os.Rename(tempFile, r.filePath); err != nil {
+		return domain.Task{}, err
+	}
+
+	return updatedTask, nil
+}
+
 func (t *taskRepositoryFS) DeleteTask(id string) error {
 
 	return nil
