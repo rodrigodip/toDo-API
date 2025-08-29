@@ -158,9 +158,68 @@ func (r *taskRepositoryFS) UpdateTask(id, title, description string) (domain.Tas
 	return updatedTask, nil
 }
 
-func (t *taskRepositoryFS) DeleteTask(id string) error {
+func (r *taskRepositoryFS) DeleteTask(id string) error {
 
-	return nil
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	// Read all tasks
+	file, err := os.Open(r.filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return errors.New("NotFoundError: File not found")
+		}
+		return err
+	}
+	defer file.Close()
+
+	var tasks []domain.Task
+	decoder := json.NewDecoder(file)
+	for decoder.More() {
+		var task domain.Task
+		if err := decoder.Decode(&task); err != nil {
+			return err
+		}
+		tasks = append(tasks, task)
+	}
+
+	// Filter out the task to delete
+	var newTasks []domain.Task
+	found := false
+	for _, task := range tasks {
+		if task.ID == id {
+			found = true
+			continue
+		}
+		newTasks = append(newTasks, task)
+	}
+
+	if !found {
+		return errors.New("NotFoundError: Invalid ID")
+	}
+
+	// Write remaining tasks back to file
+	if len(newTasks) == 0 {
+		// If no tasks left, remove the file
+		return os.Remove(r.filePath)
+	}
+
+	tempFile := r.filePath + ".tmp"
+	newFile, err := os.Create(tempFile)
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	encoder := json.NewEncoder(newFile)
+	for _, task := range newTasks {
+		if err := encoder.Encode(task); err != nil {
+			return err
+		}
+	}
+
+	// Replace the original file with the updated one
+	return os.Rename(tempFile, r.filePath)
 }
 func (t *taskRepositoryFS) SetTaskDone(id string) error {
 
