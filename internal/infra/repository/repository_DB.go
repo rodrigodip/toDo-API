@@ -61,6 +61,11 @@ func (t *taskRepositoryDB) DeleteTask(id string) error {
 }
 
 func (t *taskRepositoryDB) SetTaskDone(id string) error {
-
-	return nil
+	var task domain.Task
+	result := t.mysqlDB.First(&task, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	upDated := t.mysqlDB.Model(&task).Update("Completed", true)
+	return upDated.Error
 }

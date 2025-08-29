@@ -2,10 +2,11 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rodrigodip/toDo-API/internal/aplication/usecase"
 	rest_err "github.com/rodrigodip/toDo-API/pkg/errors/rest-err"
-	"net/http"
 )
 
 type taskController struct {
@@ -18,6 +19,7 @@ type TaskController interface {
 	GetTask(c *gin.Context)
 	DeleteTask(c *gin.Context)
 	UpdateTask(c *gin.Context)
+	SetTaskDone(c *gin.Context)
 }
 
 func NewTaskController(tu usecase.CreateTask) TaskController {
@@ -77,7 +79,8 @@ func (tc *taskController) DeleteTask(c *gin.Context) {
 		c.JSON(restErr.Code, restErr)
 		return
 	}
-	c.JSON(http.StatusOK, "Task Deleted.")
+	response := fmt.Sprintf("Task {id: %s} DELETED", taskId)
+	c.JSON(http.StatusOK, response)
 
 }
 func (tc *taskController) UpdateTask(c *gin.Context) {
@@ -98,4 +101,17 @@ func (tc *taskController) UpdateTask(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, task)
+}
+func (tc *taskController) SetTaskDone(c *gin.Context) {
+	taskId := c.Param("id")
+	err := tc.taskUsecase.SetTaskDone(taskId)
+	if err != nil {
+		restErr := rest_err.NewNotFoundError(
+			fmt.Sprintf("No tasks found.\n Error: %s\n", err.Error()),
+		)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	response := fmt.Sprintf("Task {id:%s} setted as DONE", taskId)
+	c.JSON(http.StatusOK, response)
 }

@@ -90,11 +90,14 @@ func (ct *CreateTask) UpdateTask(id, title, description string) (TaskDtoOutput, 
 func (ct *CreateTask) DeleteTask(id string) error {
 	err := ct.Repository.DeleteTask(id)
 	if err != nil {
-		return nil
+		return err
 	}
 	return nil
 }
-func SetTaskDone(id string) error {
-
+func (ct *CreateTask) SetTaskDone(id string) error {
+	err := ct.Repository.SetTaskDone(id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
