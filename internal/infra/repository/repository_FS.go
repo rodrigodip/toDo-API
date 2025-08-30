@@ -221,7 +221,59 @@ func (r *taskRepositoryFS) DeleteTask(id string) error {
 	// Replace the original file with the updated one
 	return os.Rename(tempFile, r.filePath)
 }
-func (t *taskRepositoryFS) SetTaskDone(id string) error {
+func (r *taskRepositoryFS) SetTaskDone(id string) error {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
 
-	return nil
+	// Read all tasks
+	file, err := os.Open(r.filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return errors.New("NotFoundError: SETDONE File not found")
+		}
+		return err
+	}
+	defer file.Close()
+
+	var tasks []domain.Task
+	decoder := json.NewDecoder(file)
+	for decoder.More() {
+		var task domain.Task
+		if err := decoder.Decode(&task); err != nil {
+			return err
+		}
+		tasks = append(tasks, task)
+	}
+
+	// Find and update the task
+	found := false
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Completed = true
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return errors.New("NotFoundError: SetDone Invalid ID")
+	}
+
+	// Write all tasks back to file
+	tempFile := r.filePath + ".tmp"
+	newFile, err := os.Create(tempFile)
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	encoder := json.NewEncoder(newFile)
+	for _, task := range tasks {
+		if err := encoder.Encode(task); err != nil {
+			return err
+		}
+	}
+
+	// Replace the original file with the updated one
+	return os.Rename(tempFile, r.filePath)
 }
