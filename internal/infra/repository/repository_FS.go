@@ -23,7 +23,7 @@ func NewTaskReposytoryFS(filePath string) *taskRepositoryFS {
 func (r *taskRepositoryFS) Create(id, title, description string, completed bool) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
-	newTask := task{
+	newTask := Task{
 		ID:          id,
 		Title:       title,
 		Description: description,

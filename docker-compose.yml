@@ -25,6 +25,7 @@ services:
       - mynet
 
   app:
+    user: "1001"
     build:
       context: .
       dockerfile: Dockerfile
@@ -38,10 +39,15 @@ services:
       DB_USER: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_NAME: ${MYSQL_DATABASE}
+      PERSISTENCE_TYPE: ${PERSISTENCE_TYPE}
+      FILE_PATH: ${FILE_PATH}
     ports:
       - "8080:8080"
+    volumes:
+      - app-data:/task-data
     networks:
       - mynet
 
 volumes:
   mysql-data:
+  app-data:

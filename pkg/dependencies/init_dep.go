@@ -29,6 +29,10 @@ func TaskRepositoryFactory(database *gorm.DB) (repository.TaskRepository, error)
 			return nil, fmt.Errorf("database connection is nil for mysql persistence")
 		}
 		log.Println("Persistence Method: MySQL")
+		err := database.AutoMigrate(&repository.Task{})
+		if err != nil {
+			panic("erro migrating")
+		}
 		return repository.NewTaskRepositoryDB(database), nil
 
 	default:

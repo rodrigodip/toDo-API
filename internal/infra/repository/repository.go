@@ -2,7 +2,7 @@ package repository
 
 import "github.com/rodrigodip/toDo-API/internal/domain"
 
-type task struct {
+type Task struct {
 	ID          string
 	Title       string
 	Description string

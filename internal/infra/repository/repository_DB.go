@@ -16,7 +16,7 @@ func NewTaskRepositoryDB(database *gorm.DB) *taskRepositoryDB {
 }
 
 func (t *taskRepositoryDB) Create(id, title, description string, completed bool) error {
-	newTask := task{
+	newTask := Task{
 		ID:          id,
 		Title:       title,
 		Description: description,

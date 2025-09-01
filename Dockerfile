@@ -17,9 +17,9 @@ COPY . .
 RUN go build \
 	-ldflags="-linkmode external -extldflags -static" \
 	-tags netgo \
-	-o todo-api
+	-o todo-api ./cmd/todo-api/
 
-FROM scratch
+FROM golang:1.24-bullseye
 
 ENV GIN_MODE=release
 
@@ -29,8 +29,13 @@ COPY --from=build-production /etc/passwd /etc/passwd
 
 COPY --from=build-production /app/todo-api todo-api
 
+RUN mkdir -p /task-data && chown -R 1001:1001 /task-data
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 USER nonroot
 
 EXPOSE 8080
 
-CMD ["/todo-api"]
+ENTRYPOINT ["/entrypoint.sh"]
