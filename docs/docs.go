@@ -32,11 +32,11 @@ const docTemplate = `{
                     "200": {
                         "description": "Tasks information retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/response.TaskResponse"
+                            "$ref": "#/definitions/usecase.TaskDtoOutput"
                         }
                     },
                     "400": {
-                        "description": "Error: ID must be a number",
+                        "description": "Error: No tasks found.",
                         "schema": {
                             "$ref": "#/definitions/rest_err.RestErr"
                         }
@@ -70,7 +70,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.TaskRequest"
+                            "$ref": "#/definitions/usecase.CreateTaskRequest"
                         }
                     }
                 ],
@@ -78,7 +78,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.TaskResponse"
+                            "$ref": "#/definitions/usecase.TaskDtoOutput"
                         }
                     },
                     "400": {
@@ -120,7 +120,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Task {taskId} was Deleted"
+                        "description": "Task {id: %s} DELETED"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -204,7 +204,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Tasks information retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/response.TaskResponse"
+                            "$ref": "#/definitions/usecase.TaskDtoOutput"
                         }
                     },
                     "400": {
@@ -249,7 +249,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.TaskRequest"
+                            "$ref": "#/definitions/usecase.TaskDtoOutput"
                         }
                     }
                 ],
@@ -274,48 +274,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "request.TaskRequest": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "description": {
-                    "description": "@json\n@jsonTag description\n@jsonExample Buy fuel for the lawn mower\n@binding min=3,max=30",
-                    "type": "string",
-                    "maxLength": 50
-                },
-                "title": {
-                    "description": "@json\n@jsonTag title\n@jsonExample Mow the lawn\n@binding required,min=3,max=30",
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
-                }
-            }
-        },
-        "response.TaskResponse": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "completed": {
-                    "type": "boolean"
-                },
-                "description": {
-                    "type": "string",
-                    "maxLength": 50
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 3
-                }
-            }
-        },
         "rest_err.RestErr": {
             "type": "object",
             "properties": {
@@ -326,6 +284,34 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.CreateTaskRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.TaskDtoOutput": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "decription": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -340,7 +326,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{"http"},
 	Title:            "toDo-API",
-	Description:      "API for crud operations on tasks",
+	Description:      "API for tasks managemant",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

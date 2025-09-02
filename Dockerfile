@@ -31,6 +31,8 @@ COPY --from=build-production /app/todo-api todo-api
 
 RUN mkdir -p /task-data && chown -R 1001:1001 /task-data
 
+COPY ./docs /app/docs
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

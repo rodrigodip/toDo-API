@@ -50,7 +50,7 @@ go mod tidy
 3. Rode a aplicação
 ```bash
 go run main.go
-```
+``
 
 ## Testing the Application
 Após rodar o projeto, visite [http://localhost:8081/swagger/index.html#](http://localhost:8080/swagger/index.html#) para testar todos os end points.

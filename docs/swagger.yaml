@@ -1,43 +1,5 @@
 basePath: /
 definitions:
-  request.TaskRequest:
-    properties:
-      description:
-        description: |-
-          @json
-          @jsonTag description
-          @jsonExample Buy fuel for the lawn mower
-          @binding min=3,max=30
-        maxLength: 50
-        type: string
-      title:
-        description: |-
-          @json
-          @jsonTag title
-          @jsonExample Mow the lawn
-          @binding required,min=3,max=30
-        maxLength: 30
-        minLength: 3
-        type: string
-    required:
-    - title
-    type: object
-  response.TaskResponse:
-    properties:
-      completed:
-        type: boolean
-      description:
-        maxLength: 50
-        type: string
-      id:
-        type: integer
-      title:
-        maxLength: 30
-        minLength: 3
-        type: string
-    required:
-    - title
-    type: object
   rest_err.RestErr:
     properties:
       code:
@@ -47,10 +9,28 @@ definitions:
       message:
         type: string
     type: object
+  usecase.CreateTaskRequest:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  usecase.TaskDtoOutput:
+    properties:
+      completed:
+        type: boolean
+      decription:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  description: API for crud operations on tasks
+  description: API for tasks managemant
   title: toDo-API
   version: "1.0"
 paths:
@@ -65,9 +45,9 @@ paths:
         "200":
           description: Tasks information retrieved successfully
           schema:
-            $ref: '#/definitions/response.TaskResponse'
+            $ref: '#/definitions/usecase.TaskDtoOutput'
         "400":
-          description: 'Error: ID must be a number'
+          description: 'Error: No tasks found.'
           schema:
             $ref: '#/definitions/rest_err.RestErr'
         "404":
@@ -88,14 +68,14 @@ paths:
         name: TaskRequest
         required: true
         schema:
-          $ref: '#/definitions/request.TaskRequest'
+          $ref: '#/definitions/usecase.CreateTaskRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.TaskResponse'
+            $ref: '#/definitions/usecase.TaskDtoOutput'
         "400":
           description: Bad Request
           schema:
@@ -122,7 +102,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Task {taskId} was Deleted
+          description: 'Task {id: %s} DELETED'
         "400":
           description: Bad Request
           schema:
@@ -178,7 +158,7 @@ paths:
         "200":
           description: Tasks information retrieved successfully
           schema:
-            $ref: '#/definitions/response.TaskResponse'
+            $ref: '#/definitions/usecase.TaskDtoOutput'
         "400":
           description: 'Error: ID must be a number'
           schema:
@@ -206,7 +186,7 @@ paths:
         name: TasksRequest
         required: true
         schema:
-          $ref: '#/definitions/request.TaskRequest'
+          $ref: '#/definitions/usecase.TaskDtoOutput'
       produces:
       - application/json
       responses:

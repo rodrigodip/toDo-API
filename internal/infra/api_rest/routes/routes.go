@@ -2,9 +2,10 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	docs "github.com/rodrigodip/toDo-API/docs"
 	"github.com/rodrigodip/toDo-API/internal/api/http/controller"
-	// swaggerfiles "github.com/swaggo/files"
-	// ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func InitGroup(r *gin.RouterGroup, app controller.TaskController) {
@@ -16,5 +17,6 @@ func InitGroup(r *gin.RouterGroup, app controller.TaskController) {
 	r.PUT("/setTaskDone/:id", app.SetTaskDone)
 	r.DELETE("/deleteTask/:id", app.DeleteTask)
 	//
-	//r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	docs.SwaggerInfo.BasePath = "/"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }
