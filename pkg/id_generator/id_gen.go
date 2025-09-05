@@ -2,15 +2,36 @@ package IDgenerator
 
 import (
 	"strconv"
+	"sync"
+	"time"
 )
 
-var lastID int
+type TimestampIDGenerator struct {
+	mutex    sync.Mutex
+	lastTime int64
+	sequence int64
+}
 
-// TODO: Função para receber o ultimo ID persistido no DB ou no FS
-func NewID() string {
+func NewTimestampIDGenerator() *TimestampIDGenerator {
+	return &TimestampIDGenerator{
+		lastTime: time.Now().UnixNano(),
+	}
+}
 
-	var newID int = lastID + 1
-	lastID = newID
+func (g *TimestampIDGenerator) NewID() string {
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
 
-	return strconv.Itoa(newID)
+	currentTime := time.Now().UnixNano()
+
+	if currentTime == g.lastTime {
+		g.sequence++
+	} else {
+		g.sequence = 0
+		g.lastTime = currentTime
+	}
+
+	newID := (currentTime << 16) | (g.sequence & 0xFFFF)
+
+	return strconv.FormatInt(newID, 10)
 }

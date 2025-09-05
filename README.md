@@ -53,7 +53,7 @@ go run main.go
 ``
 
 ## Testing the Application
-Após rodar o projeto, visite [http://localhost:8081/swagger/index.html#](http://localhost:8080/swagger/index.html#) para testar todos os end points.
+Após rodar o projeto, visite [http://localhost:8080/swagger/index.html#](http://localhost:8080/swagger/index.html#) para testar todos os end points.
 Também é possível usar ferramentas como [curl](https://curl.se/) ou [postman](https://www.postman.com/) para testar os endpoints. A seguir temos alguns exemplos de comandos da ferramenta `curl`:
 
 **Lembre-se de ajustar os comandos de acordo com sua necessidade.**

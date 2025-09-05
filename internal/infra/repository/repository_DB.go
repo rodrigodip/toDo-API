@@ -29,6 +29,9 @@ func (t *taskRepositoryDB) Create(id, title, description string, completed bool)
 func (t *taskRepositoryDB) GetTasks() ([]domain.Task, error) {
 	var tasks []domain.Task
 	result := t.mysqlDB.Find(&tasks)
+	if result.RowsAffected < 1 {
+		return []domain.Task{}, errors.New("GETALL: No Tasks Found")
+	}
 	return tasks, result.Error
 }
 

@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/rodrigodip/toDo-API/internal/domain"
-	IDgenerator "github.com/rodrigodip/toDo-API/pkg/id_generator"
+	"github.com/rodrigodip/toDo-API/pkg/id_generator"
 )
 
 type CreateTask struct {
@@ -21,8 +21,9 @@ func (ct *CreateTask) Create(input CreateTaskRequest) (TaskDtoOutput, error) {
 	if err != nil {
 		return TaskDtoOutput{}, err
 	}
+	generator := IDgenerator.NewTimestampIDGenerator()
 	output := TaskDtoOutput{
-		ID:          IDgenerator.NewID(),
+		ID:          generator.NewID(),
 		Title:       newTask.Title,
 		Description: newTask.Description,
 		Completed:   false,
