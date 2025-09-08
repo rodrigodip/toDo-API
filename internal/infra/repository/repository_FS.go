@@ -20,7 +20,7 @@ func NewTaskReposytoryFS(filePath string) *taskRepositoryFS {
 }
 
 // Create writes a new task task into tasks.txt
-func (r *taskRepositoryFS) Create(id, title, description string, completed bool) error {
+func (r *taskRepositoryFS) CreateTask(id, title, description string, completed bool) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	newTask := Task{

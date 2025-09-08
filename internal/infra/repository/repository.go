@@ -3,14 +3,14 @@ package repository
 import "github.com/rodrigodip/toDo-API/internal/domain"
 
 type Task struct {
-	ID          string
+	ID          string `gorm:"size:255;not null"`
 	Title       string
 	Description string
 	Completed   bool
 }
 
 type TaskRepository interface {
-	Create(id, title, description string, completed bool) error
+	CreateTask(id, title, description string, completed bool) error
 	GetTasks() ([]domain.Task, error)
 	GetTask(id string) (domain.Task, error)
 	UpdateTask(id, title, description string) (domain.Task, error)

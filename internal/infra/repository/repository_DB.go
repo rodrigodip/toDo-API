@@ -15,7 +15,7 @@ func NewTaskRepositoryDB(database *gorm.DB) *taskRepositoryDB {
 	return &taskRepositoryDB{mysqlDB: database}
 }
 
-func (t *taskRepositoryDB) Create(id, title, description string, completed bool) error {
+func (t *taskRepositoryDB) CreateTask(id, title, description string, completed bool) error {
 	newTask := Task{
 		ID:          id,
 		Title:       title,
